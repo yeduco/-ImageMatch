@@ -161,8 +161,12 @@ void WindowCapture(const HWND &hwnd, cv::Mat &searchImg) {
     ReleaseDC(hwnd, hSrcDC);
 }
 
-double GetWindowDpiScaleFactor(int type) {
-    switch (type) {
+double GetWindowDpiScaleFactor() {
+    auto fGetDpiForWindow = (GetDpiForWindow) GetProcAddress(GetModuleHandle(TEXT("User32")), "GetDpiForWindow");
+    JUDGE_RETURN(fGetDpiForWindow != nullptr, 1);
+    HWND desktopHwnd = GetDesktopWindow();
+    int dpi = (*fGetDpiForWindow)(desktopHwnd);
+    switch (dpi) {
         case DPI_SCALE_FACTOR_100:
             return 1;
         case DPI_SCALE_FACTOR_125:
@@ -177,12 +181,7 @@ double GetWindowDpiScaleFactor(int type) {
 }
 
 void GetWindowWidthHeight(HWND hwnd, int& width, int& height){
-    auto fGetDpiForWindow = (GetDpiForWindow) GetProcAddress(GetModuleHandle(TEXT("User32")), "GetDpiForWindow");
-    JUDGE_RETURN(fGetDpiForWindow != nullptr, ;);
-    HWND desktopHwnd = GetDesktopWindow();
-    int dpi = (*fGetDpiForWindow)(desktopHwnd);
-    double dpiScaleFactor = GetWindowDpiScaleFactor(dpi);
-
+    double dpiScaleFactor = GetWindowDpiScaleFactor();
     RECT rc;
     GetWindowRect(hwnd, &rc);
     width = int((rc.right - rc.left) * dpiScaleFactor);

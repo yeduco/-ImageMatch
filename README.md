@@ -1,1 +1,1 @@
-# -ImageMatch
+# -ImageMatcher

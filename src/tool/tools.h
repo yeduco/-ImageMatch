@@ -44,11 +44,14 @@ BOOL CALLBACK lpEnumFunc(HWND hwnd, LPARAM lParam);
 
 void WindowCapture(const HWND& hwnd, cv::Mat& searchImg);
 
-double GetWindowDpiScaleFactor(int type);
+double GetWindowDpiScaleFactor();
 
 void GetWindowWidthHeight(HWND hwnd, int& width, int& height);
 
+//判断是否是一个不规则矩阵
 bool IsIrregularRectangle(const std::vector<cv::Point2f>& pos);
+
+//判断坐标是否在矩阵内
 bool IsInIrregularRectangle(const std::vector<cv::Point2f>& rectPos, cv::Point2f& pos);
 
 
