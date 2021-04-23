@@ -6,7 +6,7 @@
 #include "opencv2/opencv.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/core/core.hpp"
-#include "tool/tools.h"
+#include "public/tools.h"
 #include "vector"
 #include "opencv2/features2d.hpp"
 #include "opencv2/xfeatures2d.hpp"
@@ -16,7 +16,6 @@
 namespace image_match{
 
     ImageMatchAI::ImageMatchAI() {
-        this->m_hProcess = nullptr;
         this->m_aiTree = nullptr;
         this->m_hMainHwnd = nullptr;
         this->m_hClientHwnd = nullptr;
@@ -53,26 +52,12 @@ namespace image_match{
         return this->m_hMainHwnd;
     }
 
-    void ImageMatchAI::ExecuteMouseClick() {
-        RECT rc;
-        int width = 0;
-        int height = 0;
-        GetWindowWidthHeight(this->m_hClientHwnd, width, height);
-        GetClientRect(this->m_hClientHwnd, &rc);
-        printf("GetClientRect width:%d, height:%d\n", rc.right, rc.bottom);
-        GetWindowRect(this->m_hClientHwnd, &rc);
-        printf("GetWindowRect width:%d, height:%d\n", rc.right - rc.left, rc.bottom - rc.top);
-        POINT pos;
-        pos.x = rc.right / 2;
-        pos.y = rc.bottom / 2;
-//        ScreenToClient(this->m_hClientHwnd, &pos);
-        ClientToScreen(this->m_hClientHwnd, &pos);
-        printf("ScreenToClient x:%d, y:%d\n",pos.x,pos.y);
-        SetCursorPos(pos.x, pos.y);
-//        ClientToScreen(this->m_hMainHwnd, &pos);
-//        printf("ClientToScreen x:%d, y:%d\n",pos.x,pos.y);
-//        SendMessage(this->m_hClientHwnd, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(279, 158));
-//        SendMessage(this->m_hClientHwnd, WM_LBUTTONUP, 0, MAKELPARAM(279, 158));
+    void ImageMatchAI::ExecuteMouseClick(POINT point) {
+        ClientToScreen(this->m_hClientHwnd, &point);
+        SetCursorPos(point.x, point.y);
+        printf("ClientToScreen x:%d, y:%d\n",point.x,point.y);
+        SendMessage(this->m_hClientHwnd, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(point.x, point.y));
+        SendMessage(this->m_hClientHwnd, WM_LBUTTONUP, 0, MAKELPARAM(point.x, point.y));
     }
 
     void ImageMatchAI::SetAiTree(behavior::BehaviorNode *aiTree) {
@@ -85,7 +70,6 @@ namespace image_match{
         int height = 0;
         GetWindowWidthHeight(this->m_hClientHwnd, width, height);
         int bmpSize = width * height * 4;
-//        printf("(%d, %d)\n", width, height);
         HDC hSrcDC = GetDC(this->m_hClientHwnd);
         HDC hMemDC = CreateCompatibleDC(hSrcDC);
         HBITMAP hMemBMP = CreateCompatibleBitmap(hSrcDC, width, height);

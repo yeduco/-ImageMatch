@@ -7,6 +7,7 @@
 
 #include "behavior_tree.h"
 #include "nodes/action/action.h"
+#include "opencv2/highgui.hpp"
 
 namespace image_match {
     class AIIMBaseAction : public behavior::BevActionNode {
@@ -20,7 +21,9 @@ namespace image_match {
 
         virtual int AIIMExecute(const behavior::BevNodeInputParam &input);
 
-//        cv::Mat
+        cv::Mat GetTmplImage();
+
+        cv::Mat m_tmplImage;
     };
 
     class AIIMClickAction : public AIIMBaseAction {

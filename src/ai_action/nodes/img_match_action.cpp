@@ -14,6 +14,10 @@ int image_match::AIIMBaseAction::AIIMExecute(const behavior::BevNodeInputParam &
     return BT_SUCCESS;
 }
 
+cv::Mat image_match::AIIMBaseAction::GetTmplImage() {
+    return this->m_tmplImage;
+}
+
 int image_match::AIIMClickAction::AIIMExecute(const behavior::BevNodeInputParam &input) {
     std::cout << "nodeName:" << this->GetFileName() << " click action" << std::endl;
     return BT_SUCCESS;

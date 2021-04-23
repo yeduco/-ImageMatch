@@ -15,6 +15,10 @@ namespace image_match{
         return true;
     }
 
+    cv::Mat AIIMConditionBase::GetTmplImage() {
+        return this->m_tmplImage;
+    }
+
     bool AIIMCondMatchSuccess::AIIMInternalCondition(const behavior::BevNodeInputParam &input) {
         return true;
     }

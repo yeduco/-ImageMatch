@@ -21,7 +21,7 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::FeatureMatcher(cv::Mat &tmplIm
     std::vector<cv::KeyPoint> tmplKeyPoint;
     std::vector<cv::DMatch> matches;  //存放匹配结果
     std::vector<cv::DMatch> goodMatches;  //选出最好的匹配结果
-
+    std::tuple<bool, int, int, cv::Mat> result(false, 0, 0, cv::Mat());
     cv::Mat tmplDescriptor, searchDescriptor, matchesImage;
     DetectAndComputeKeyPoint(detector, detector, tmplImage,
                              tmplKeyPoint, mainImage, searchKeyPoint,
@@ -48,6 +48,7 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::FeatureMatcher(cv::Mat &tmplIm
             inLiners.push_back(matches[i]);
         }
     }
+    JUDGE_RETURN(inLiners.size() >= 4, result);
     matches.swap(inLiners);
     cv::drawMatches(tmplImage, tmplKeyPoint,mainImage, searchKeyPoint,
                     matches, matchesImage, cv::Scalar::all(-1), CV_RGB(0, 0, 255),
@@ -61,7 +62,6 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::FeatureMatcher(cv::Mat &tmplIm
     tmplCorner[3] = cv::Point(0, tmplImage.rows);
 
     cv::perspectiveTransform(tmplCorner, searchCorner, h);
-    std::tuple<bool, int, int, cv::Mat> result(false, 0, 0, cv::Mat());
     drawLine(tmplImage, mainImage, matchesImage, searchCorner);
     JUDGE_RETURN(IsIrregularRectangle(searchCorner), result);
     int matchRatio = int(matches.size() * 0.85);
@@ -107,7 +107,6 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::TemplateMatcher(cv::Mat &tmplI
     cv::Point rightBottomPos(maxLoc.x + tmplImage.cols, maxLoc.y + tmplImage.rows);
     int x = int((matchLoc.x + rightBottomPos.x) / 2);
     int y = int((matchLoc.y + rightBottomPos.y) / 2);
-    printf("x:%d y:%d", x, y);
     cv::Point centerPos = CenterPos(matchLoc, rightBottomPos);
     cv::rectangle(mainImage, matchLoc, cv::Point(rightBottomPos.x, rightBottomPos.y),
                   cv::Scalar(0, 0, 245), 2, 8, 0);
@@ -171,8 +170,8 @@ void ImageMatcher::drawLine(cv::Mat &tmplImg, cv::Mat &mainImage, cv::Mat &match
 
 cv::Point ImageMatcher::CenterPos(cv::Point &leftTopPos, cv::Point &rightBottomPos) {
     double dpiSaleFactor = GetWindowDpiScaleFactor();
-    int x = int(((leftTopPos.x + rightBottomPos.x) / 2) / dpiSaleFactor);
-    int y = int(((leftTopPos.y + rightBottomPos.y) / 2) / dpiSaleFactor);
+    int x = int((leftTopPos.x + rightBottomPos.x) / 2 / dpiSaleFactor);
+    int y = int((leftTopPos.y + rightBottomPos.y) / 2 / dpiSaleFactor);
     return {x,y};
 }
 

@@ -26,7 +26,7 @@ namespace image_match {
         HWND& GetMainHwnd();
         HWND& GetClientHwnd();
     public:
-        void ExecuteMouseClick();
+        void ExecuteMouseClick(POINT point);
 
         cv::Mat &GetTmplImage();
         cv::Mat &GetSearchImage();
@@ -39,7 +39,6 @@ namespace image_match {
         behavior::BehaviorNode *m_aiTree;
         cv::Mat m_tmplImage;
         cv::Mat m_searchImage;
-        HANDLE m_hProcess;
         HWND m_hMainHwnd;
         HWND m_hClientHwnd;
 

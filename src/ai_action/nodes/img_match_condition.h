@@ -5,6 +5,7 @@
 #ifndef BEHAVIORTREE_IMG_MATCH_CONDITION_H
 #define BEHAVIORTREE_IMG_MATCH_CONDITION_H
 #include "conditions/conditions.h"
+#include "opencv2/highgui.hpp"
 
 namespace image_match {
     class AIIMConditionBase : public behavior::ConditionBase {
@@ -14,6 +15,10 @@ namespace image_match {
         ~AIIMConditionBase() override = default;
 
         virtual bool ExternalCondition(const behavior::BevNodeInputParam& input);
+
+    protected:
+        cv::Mat GetTmplImage();
+        cv::Mat m_tmplImage;
 
     private:
         virtual bool AIIMExternalCondition(const behavior::BevNodeInputParam &input);

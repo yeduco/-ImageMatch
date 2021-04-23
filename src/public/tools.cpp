@@ -98,7 +98,6 @@ DWORD GetProcessIDByName(const std::string& name){
     for (BOOL ret = Process32First(hSnapshot, &pe); ret; ret = Process32Next(hSnapshot, &pe)) {
         if(strcmp(name.c_str(), pe.szExeFile) == 0){
             std::cout << "process name:" << pe.szExeFile << std::endl;
-//            HANDLE hProcess = ::OpenProcess(PROCESS_TERMINATE, FALSE, pe.th32ProcessID);
             CloseHandle(hSnapshot);
             return pe.th32ProcessID;
         }
@@ -106,7 +105,6 @@ DWORD GetProcessIDByName(const std::string& name){
     CloseHandle(hSnapshot);
     return 0;
 }
-
 
 void GetProcessTitleAndVersion(const HWND& hwnd, std::string &titleVersion) {
     char version[VERSION_MAX] = {0};
