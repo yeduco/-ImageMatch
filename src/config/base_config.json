@@ -1,0 +1,6 @@
+{
+    "name":"基础配置",
+    "app_main_class_name" : "LDPlayerMainFrame",
+    "app_child_class_name" : "RenderWindow"
+    
+}

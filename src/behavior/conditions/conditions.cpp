@@ -14,7 +14,7 @@ namespace behavior {
         this->m_fieldName = field_name;
     }
 
-    std::string &ConditionBase::FieldName() {
+    std::string &ConditionBase::GetFieldName() {
         return this->m_fieldName;
     }
 

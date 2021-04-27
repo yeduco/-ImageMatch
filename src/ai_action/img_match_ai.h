@@ -5,43 +5,41 @@
 #ifndef BEHAVIORTREE_IMG_MATCH_AI_H
 #define BEHAVIORTREE_IMG_MATCH_AI_H
 
-#endif //BEHAVIORTREE_IMG_MATCH_AI_H
-
 #include <opencv2/opencv.hpp>
 #include "string"
 #include "windows.h"
 #include "behavior/behavior_tree.h"
 
-namespace image_match {
-    class ImageMatchAI {
-    public:
-        ImageMatchAI();
+class ImageMatchAI {
+public:
+    ImageMatchAI();
 
-        ~ImageMatchAI() = default;
+    ~ImageMatchAI() = default;
 
-        void init();
+    void init();
 
-        void SetTmplImage(const std::string &img_path);
+    void SetTmplImage(const std::string &img_path);
 
-        HWND& GetMainHwnd();
-        HWND& GetClientHwnd();
-    public:
-        void ExecuteMouseClick(POINT point);
+    HWND &GetMainHwnd();
 
-        cv::Mat &GetTmplImage();
-        cv::Mat &GetSearchImage();
+    HWND &GetClientHwnd();
 
-        void SetAiTree(behavior::BehaviorNode *aiTree);
+public:
+    void ExecuteMouseClick(POINT point);
 
-        void CaptureCurrentWindow();
+    cv::Mat &GetTmplImage();
 
-    private:
-        behavior::BehaviorNode *m_aiTree;
-        cv::Mat m_tmplImage;
-        cv::Mat m_searchImage;
-        HWND m_hMainHwnd;
-        HWND m_hClientHwnd;
+    cv::Mat &GetSearchImage();
 
+    void SetAiTree(behavior::BehaviorNode *aiTree);
 
-    };
-}
+    cv::Mat CreateMat();
+
+private:
+    behavior::BehaviorNode *m_aiTree;
+    cv::Mat m_tmplImage;
+    cv::Mat m_searchImage;
+    HWND m_hMainHwnd;
+    HWND m_hClientHwnd;
+};
+#endif //BEHAVIORTREE_IMG_MATCH_AI_H

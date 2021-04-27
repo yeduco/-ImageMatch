@@ -15,4 +15,5 @@
 #include <iostream>
 #include "public/tools.h"
 #include <cstdio>
+
 #endif //_IMAGEMATCH_INCLUDE_H

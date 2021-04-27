@@ -17,11 +17,14 @@ public:
 
     void init();
 
-    static void LoadJsonConfig(Document &doc, char* path);
+    void LoadJsonConfig(Document &doc, char* path);
+
+    Document& GetBaseConfig();
+    Document& GetImageMatchTree();
 
 private:
-    Document m_base;
-    Document m_bevTree;
+    Document m_baseConfig;
+    Document m_imageMatchTree;
 };
 
 

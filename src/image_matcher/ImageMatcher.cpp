@@ -9,8 +9,9 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::Match(cv::Mat& tmplImage, cv::
             return FeatureMatcher(tmplImage, mainImage, minHessian);
         case E_TEMPLATE_MATCHER:
             return TemplateMatcher(tmplImage, mainImage, matchType);
+        default:
+            return std::tuple<bool, int, int, cv::Mat>(false, 0, 0, cv::Mat());
     }
-    return std::tuple<bool, int, int, cv::Mat>(false, 0, 0, cv::Mat());
 }
 
 
@@ -180,4 +181,22 @@ cv::Point ImageMatcher::CenterPos(cv::Point2f &leftTopPos, cv::Point2f &rightBot
     int x = int(((leftTopPos.x + rightBottomPos.x) / 2) / dpiSaleFactor);
     int y = int(((leftTopPos.y + rightBottomPos.y) / 2) / dpiSaleFactor);
     return {x,y};
+}
+
+bool ImageMatcher::CaptureScreen(HWND &hwnd, cv::Mat &output) {
+    JUDGE_RETURN(hwnd != nullptr, false);
+    int width = 0;
+    int height = 0;
+    GetWindowWidthHeight(hwnd, width, height);
+    int bmpSize = width * height * 4;
+    HDC hSrcDC = GetDC(hwnd);
+    HDC hMemDC = CreateCompatibleDC(hSrcDC);
+    HBITMAP hMemBMP = CreateCompatibleBitmap(hSrcDC, width, height);
+    static_cast<HBITMAP>(SelectObject(hMemDC, hMemBMP));
+    BitBlt(hMemDC, 0, 0, width, height, hSrcDC, 0, 0, SRCCOPY | CAPTUREBLT);
+    GetBitmapBits(hMemBMP, bmpSize, output.data);
+    DeleteObject(hMemBMP);
+    DeleteDC(hMemDC);
+    ReleaseDC(hwnd, hSrcDC);
+    return true;
 }

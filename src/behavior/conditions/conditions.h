@@ -8,17 +8,14 @@
 #include "behavior_tree.h"
 #include <string>
 namespace behavior{
-    struct AnyData;
-
-    typedef AnyData BevNodeInputParam;
-    typedef AnyData BevNodeOutputParam;
 
     class ConditionBase {
     public:
         virtual ~ConditionBase()= default;
-        virtual bool ExternalCondition(const BevNodeInputParam& input) const = 0;
+        virtual bool ExternalCondition(const BevNodeInputParam& input) = 0;
         void SetFieldName(const std::string &fieldName);
-        std::string &FieldName();
+
+        std::string &GetFieldName();
 
     private:
         std::string m_fieldName;

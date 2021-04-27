@@ -13,7 +13,7 @@ namespace behavior {
     }
 
     void BevActionNode::DoEnter(const BevNodeInputParam &input, const BevNodeOutputParam &output) {
-        std::cout << "enter [" << this->GetFileName() << "]" << std::endl;
+        std::cout << "enter [" << this->GetFieldName() << "]" << std::endl;
     }
 
     int BevActionNode::DoExecute(const BevNodeInputParam &input) {
@@ -21,10 +21,10 @@ namespace behavior {
     }
 
     void BevActionNode::DoExit(const BevNodeInputParam &input, const BevNodeOutputParam &output) {
-        std::cout << "exit [" << this->GetFileName() << "]" << std::endl;
+        std::cout << "exit [" << this->GetFieldName() << "]" << std::endl;
     }
 
     void BevActionNode::dump_log(const BevNodeInputParam &input) {
-        std::cout <<"Action:[" <<  input.m_data->GetName() << "] -> nodeName:[" << this->GetFileName() << "] running" << std::endl;
+        std::cout << "nodeName:[" << this->GetFieldName() << "] running" << std::endl;
     }
 }

@@ -6,8 +6,10 @@
 #define BEHAVIORTREE_BEHAVIOR_NODE_H
 
 #include <iostream>
-#include "vector"
+#include <vector>
 #include "test/test.h"
+#include "image_matcher/ImageMatcher.h"
+#include "behavior_struct.h"
 namespace behavior {
 
 #define JUDGE_RETURN(CONDITION, RETURN) if (!(CONDITION)){return RETURN;}
@@ -15,13 +17,6 @@ namespace behavior {
     class ConditionBase;
 
     class BehaviorNode;
-
-    struct AnyData {
-        TSIMData *m_data;
-    };
-
-    typedef AnyData BevNodeInputParam;
-    typedef AnyData BevNodeOutputParam;
 
     struct BevChildNode {
         explicit BevChildNode(BehaviorNode *node, int priority = 0);
@@ -65,7 +60,11 @@ namespace behavior {
 
         void SetFieldName(std::string fieldName);
 
-        std::string &GetFileName();
+        std::string &GetFieldName();
+
+        BevChildNodeVec& GetChildNodeList();
+
+        ConditionBase* GetPrecondition();
 
     protected:
         virtual bool DoEvaluate(const BevNodeInputParam &input);

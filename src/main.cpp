@@ -31,20 +31,19 @@ int main(){
 //    char path[256];
 //    GetCurrentDirectory(256, path);
 //
-//    FILE* pFile = fopen("..\\src\\birth.json", "rb");
-//    if(pFile != nullptr){
-//        char readBuffer[65535];
-//        rapidjson::FileReadStream inputStream(pFile, readBuffer, sizeof(readBuffer));
-//        rapidjson::Document d;
-//        d.ParseStream(inputStream);
-//        fclose(pFile);
-//        if(d.HasMember("1")){
-//            printf("%s", d["1"]["name"].GetString());
-//            printf("have");
-//        }
-////        printf("%s", d["1"]["name"].GetString());
-//        return 0;
-//    }
-//    ai.test();
+
+    GetWindowHwnd("RenderWindow");
+    CONFIG_INSTANCE->init();
+    FILE* pFile = fopen("..\\src\\image_match.json", "rb");
+    if(pFile != nullptr){
+        char readBuffer[65535];
+        rapidjson::FileReadStream inputStream(pFile, readBuffer, sizeof(readBuffer));
+        rapidjson::Document d;
+        d.ParseStream(inputStream);
+        fclose(pFile);
+        const rapidjson::Value& a = d["node_tree"];
+//        printf("%s", d["1"]["name"].GetString());
+        return 0;
+    }
     return 0;
 }

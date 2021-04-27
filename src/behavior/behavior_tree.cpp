@@ -65,7 +65,7 @@ namespace behavior{
         this->m_fieldName = std::move(fieldName);
     }
 
-    std::string &BehaviorNode::GetFileName() {
+    std::string &BehaviorNode::GetFieldName() {
         return this->m_fieldName;
     }
 
@@ -74,6 +74,14 @@ namespace behavior{
             return nullptr;
 
         return this->m_childNodeList[index]->m_pNode;
+    }
+
+    BevChildNodeVec &BehaviorNode::GetChildNodeList() {
+        return this->m_childNodeList;
+    }
+
+    ConditionBase *BehaviorNode::GetPrecondition() {
+        return this->m_nodePrecondition;
     }
 
     BevChildNode::BevChildNode(BehaviorNode *node, int priority) {

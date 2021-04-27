@@ -45,6 +45,7 @@ public:
 
     static cv::Point CenterPos(cv::Point2f &leftTopPos, cv::Point2f &rightBottomPos);
 
+    static bool CaptureScreen(HWND &hwnd, cv::Mat& output);
 };
 
 

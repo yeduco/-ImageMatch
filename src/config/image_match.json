@@ -1,0 +1,28 @@
+{
+    "node_name":"匹配",
+    "node_type":"control",
+    "ext_precond":"AppRunning",
+    "node_action":"Sequence",
+    "node_tree":
+    [
+        {
+            "node_name":"点击目标",
+            "node_type":"action",
+            "ext_precond":"OnObjScreen",
+            "ext_precond_resource":"",
+            "node_action":"ClickUI",
+            "node_resource":"",
+            "node_tree":
+            [
+                {
+                    "node_name":"点击目标",
+                    "node_type":"action",
+                    "ext_precond":"OnObjScreen",
+                    "ext_precond_resource":"",
+                    "node_action":"ClickUI",
+                    "node_resource":""
+                }
+            ]
+        }
+    ]
+}

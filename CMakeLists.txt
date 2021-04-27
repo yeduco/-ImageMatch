@@ -31,6 +31,7 @@ aux_source_directory(src SRCS)
 aux_source_directory(src/ai_action AI_ACTION)
 aux_source_directory(src/ai_action/nodes AI_ACTION_NODES)
 aux_source_directory(src/behavior BEV)
+aux_source_directory(src/behavior/btc_factory BEV_BTC_FACTORY)
 aux_source_directory(src/behavior/conditions BEV_CONDITIONS)
 aux_source_directory(src/behavior/nodes/action BEV_NODES_ACTION)
 aux_source_directory(src/behavior/nodes/control BEV_NODES_CONTROL)
@@ -39,11 +40,14 @@ aux_source_directory(src/public PUBLIC)
 
 MESSAGE(STATUS "${SRCS}\n")
 
+MESSAGE(STATUS "${SRCS}\n")
+
 SET(SOURCE_LIST
         ${SRCS}
         ${AI_ACTION}
         ${AI_ACTION_NODES}
         ${BEV}
+        ${BEV_BTC_FACTORY}
         ${BEV_CONDITIONS}
         ${BEV_NODES_ACTION}
         ${BEV_NODES_CONTROL}
