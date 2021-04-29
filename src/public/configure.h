@@ -17,7 +17,7 @@ public:
 
     void init();
 
-    void LoadJsonConfig(Document &doc, char* path);
+    static void LoadJsonConfig(Document &doc, const std::string& path);
 
     Document& GetBaseConfig();
     Document& GetImageMatchTree();
