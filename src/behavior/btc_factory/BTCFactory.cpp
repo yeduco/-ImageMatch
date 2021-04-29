@@ -155,13 +155,51 @@ BehaviorNode* BTCFactory::CreateControlNode(const std::string& controlName, cons
 void BTCFactory::LoadActionNodeResource(BehaviorNode *node, const Value &aiTreeJson) {
     std::__cxx11::string nodeResource = aiTreeJson["node_resource"].GetString();
     JUDGE_RETURN(!nodeResource.empty(), ;);
-    dynamic_cast<AIIMBaseAction*>(node)->LoadTmplImage(nodeResource);
+    auto BaseActionNode = dynamic_cast<AIIMBaseAction *>(node);
+    BaseActionNode->LoadTmplImage(nodeResource);
+    JUDGE_RETURN(aiTreeJson.HasMember("match_mode"), ;);
+    int matchMode = aiTreeJson["match_mode"].GetInt();
+    switch (matchMode) {
+        case ImageMatcherApi::E_FEATURE_MATCHER:
+            BaseActionNode->SetModeType(matchMode);
+            break;
+        case ImageMatcherApi::E_TEMPLATE_MATCHER: {
+            BaseActionNode->SetModeType(matchMode);
+            if (aiTreeJson.HasMember("match_type")) {
+                int matchType = aiTreeJson["match_type"].GetInt();
+                if (matchType >= cv::TM_SQDIFF && matchType <= cv::TM_SQDIFF_NORMED)
+                    BaseActionNode->SetMatchType(matchType);
+            }
+            break;
+        };
+        default:
+            break;
+    }
 }
 
-void BTCFactory::LoadActionNodeResource(BehaviorNode *node, const Document& aiTreeDoc) {
+void BTCFactory::LoadActionNodeResource(BehaviorNode *node, const Document &aiTreeDoc) {
     std::__cxx11::string nodeResource = aiTreeDoc["node_resource"].GetString();
     JUDGE_RETURN(!nodeResource.empty(), ;);
-    dynamic_cast<AIIMBaseAction*>(node)->LoadTmplImage(nodeResource);
+    auto BaseActionNode = dynamic_cast<AIIMBaseAction *>(node);
+    BaseActionNode->LoadTmplImage(nodeResource);
+    JUDGE_RETURN(aiTreeDoc.HasMember("match_mode"), ;);
+    int matchMode = aiTreeDoc["match_mode"].GetInt();
+    switch (matchMode) {
+        case ImageMatcherApi::E_FEATURE_MATCHER:
+            BaseActionNode->SetModeType(matchMode);
+            break;
+        case ImageMatcherApi::E_TEMPLATE_MATCHER: {
+            BaseActionNode->SetModeType(matchMode);
+            if (aiTreeDoc.HasMember("match_type")) {
+                int matchType = aiTreeDoc["match_type"].GetInt();
+                if (matchType >= cv::TM_SQDIFF && matchType <= cv::TM_SQDIFF_NORMED)
+                    BaseActionNode->SetMatchType(matchType);
+            }
+            break;
+        };
+        default:
+            break;
+    }
 }
 
 void BTCFactory::LoadConditionNode(BehaviorNode *node, const Value &aiTreeJson) {
@@ -176,7 +214,26 @@ void BTCFactory::LoadConditionNode(BehaviorNode *node, const Value &aiTreeJson) 
     JUDGE_RETURN(aiTreeJson.HasMember("ext_precond_resource"), ;);
     std::__cxx11::string extPreCondResource = aiTreeJson["ext_precond_resource"].GetString();
     JUDGE_RETURN(!extPreCondResource.empty(), ;);
-    dynamic_cast<AIIMConditionBase*>(conditionNode)->LoadTmplImage(extPreCondResource);
+    auto ConditionBaseNode = dynamic_cast<AIIMConditionBase *>(conditionNode);
+    ConditionBaseNode->LoadTmplImage(extPreCondResource);
+    JUDGE_RETURN(aiTreeJson.HasMember("ext_precond_match_mode"), ;);
+    int matchMode = aiTreeJson["ext_precond_match_mode"].GetInt();
+    switch (matchMode) {
+        case ImageMatcherApi::E_FEATURE_MATCHER:
+            ConditionBaseNode->SetModeType(matchMode);
+            break;
+        case ImageMatcherApi::E_TEMPLATE_MATCHER: {
+            ConditionBaseNode->SetModeType(matchMode);
+            if (aiTreeJson.HasMember("ext_precond_match_type")) {
+                int matchType = aiTreeJson["ext_precond_match_type"].GetInt();
+                if (matchType >= cv::TM_SQDIFF && matchType <= cv::TM_SQDIFF_NORMED)
+                    ConditionBaseNode->SetMatchType(matchType);
+            }
+            break;
+        };
+        default:
+            break;
+    }
 }
 
 void BTCFactory::LoadConditionNode(BehaviorNode *node, const Document& aiTreeDoc) {
@@ -191,7 +248,26 @@ void BTCFactory::LoadConditionNode(BehaviorNode *node, const Document& aiTreeDoc
     JUDGE_RETURN(aiTreeDoc.HasMember("ext_precond_resource"), ;);
     std::__cxx11::string extPreCondResource = aiTreeDoc["ext_precond_resource"].GetString();
     JUDGE_RETURN(!extPreCondResource.empty(), ;);
-    dynamic_cast<AIIMConditionBase*>(conditionNode)->LoadTmplImage(extPreCondResource);
+    auto ConditionBaseNode = dynamic_cast<AIIMConditionBase *>(conditionNode);
+    ConditionBaseNode->LoadTmplImage(extPreCondResource);
+    JUDGE_RETURN(aiTreeDoc.HasMember("ext_precond_match_mode"), ;);
+    int matchMode = aiTreeDoc["ext_precond_match_mode"].GetInt();
+    switch (matchMode) {
+        case ImageMatcherApi::E_FEATURE_MATCHER:
+            ConditionBaseNode->SetModeType(matchMode);
+            break;
+        case ImageMatcherApi::E_TEMPLATE_MATCHER: {
+            ConditionBaseNode->SetModeType(matchMode);
+            if (aiTreeDoc.HasMember("ext_precond_match_type")) {
+                int matchType = aiTreeDoc["ext_precond_match_type"].GetInt();
+                if (matchType >= cv::TM_SQDIFF && matchType <= cv::TM_SQDIFF_NORMED)
+                    ConditionBaseNode->SetMatchType(matchType);
+            }
+            break;
+        };
+        default:
+            break;
+    }
 }
 
 void BTCFactory::PrintfRootNode(BehaviorNode *node) {

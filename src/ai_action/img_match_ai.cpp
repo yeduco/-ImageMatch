@@ -35,8 +35,8 @@ bool ImageMatchAI::init() {
     int width = 0;
     int height = 0;
     GetWindowWidthHeight(this->m_hClientHwnd, width, height);
-//    SetWindowPos(this->m_hMainHwnd, HWND_TOP,
-//                 0, 0, 0, 0, SWP_NOSIZE | SWP_NOCOPYBITS);
+    SetWindowPos(this->m_hMainHwnd, HWND_TOP,
+                 0, 0, 0, 0, SWP_NOSIZE | SWP_NOCOPYBITS);
     rapidjson::Document& aiTreeConf = CONFIG_INSTANCE->GetImageMatchTree();
     behavior::BehaviorNode* aiTree = BTCFactory::GenerateAITree(aiTreeConf);
     this->SetAiTree(aiTree);
@@ -56,10 +56,11 @@ HWND &ImageMatchAI::GetMainHwnd() {
 
 void ImageMatchAI::ExecuteMouseClick(POINT point) {
     ClientToScreen(this->m_hClientHwnd, &point);
-    SetCursorPos(point.x, point.y);
+//    SetCursorPos(point.x, point.y);
+//    ::SetForegroundWindow(this->m_hClientHwnd);
     printf("ClientToScreen x:%d, y:%d\n", point.x, point.y);
-    SendMessage(this->m_hClientHwnd, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(point.x, point.y));
-    SendMessage(this->m_hClientHwnd, WM_LBUTTONUP, 0, MAKELPARAM(point.x, point.y));
+    PostMessage(this->m_hClientHwnd, WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(point.x, point.y));
+    PostMessage(this->m_hClientHwnd, WM_LBUTTONUP, 0, MAKELPARAM(point.x, point.y));
 }
 
 void ImageMatchAI::SetAiTree(behavior::BehaviorNode *aiTree) {

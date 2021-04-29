@@ -40,8 +40,6 @@ aux_source_directory(src/public PUBLIC)
 
 MESSAGE(STATUS "${SRCS}\n")
 
-MESSAGE(STATUS "${SRCS}\n")
-
 SET(SOURCE_LIST
         ${SRCS}
         ${AI_ACTION}
@@ -53,8 +51,6 @@ SET(SOURCE_LIST
         ${BEV_NODES_CONTROL}
         ${IMAGE_MATCHER}
         ${PUBLIC})
-
-MESSAGE(STATUS "${SOURCE_LIST}\n")
 
 add_executable(_ImageMatch ${SOURCE_LIST})
 target_link_libraries(_ImageMatch ${OpenCV_LIBS} psapi Version dxgi)

@@ -112,6 +112,9 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcherApi::TemplateMatcher(cv::Mat &tm
     cv::rectangle(mainImage, matchLoc, cv::Point(rightBottomPos.x, rightBottomPos.y),
                   cv::Scalar(0, 0, 245), 2, 8, 0);
     circle(mainImage, cv::Point(x, y), 6, cv::Scalar(0, 0, 255), 8);
+
+//    cv::imshow("title", mainImage);
+//    cv::waitKey(0);
     std::get<0>(result) = true;
     std::get<1>(result) = centerPos.x;
     std::get<2>(result) = centerPos.y;

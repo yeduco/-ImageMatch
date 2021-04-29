@@ -4,46 +4,23 @@
 
 #include <iostream>
 #include <ai_action/img_match_ai.h>
-#include <image_matcher/ImageMatcher.h>
+#include <image_matcher/ImageMatcherApi.h>
 #include "include.h"
 #include "public/configure.h"
+#include "image_matcher/ImageMatcherApi.h"
 
 int main(){
-//    std::cout << "hello" << std::endl;
-//    image_match::ImageMatchAI ai;
-//    ai.init();
-//    ai.SetTmplImage(R"(H:\-ImageMatch\src\t.jpg)");
-//    ai.CaptureCurrentWindow();
-//    std::tuple<bool, int, int, cv::Mat> result = ImageMatcher::Match(ai.GetTmplImage(), ai.GetSearchImage(), ImageMatcher::E_FEATURE_MATCHER);
-//    bool isMatch = std::get<0>(result);
-//    int x = std::get<1>(result);
-//    int y = std::get<2>(result);
-//    cv::Mat showImage = std::get<3>(result);
-//    cv::imshow("title",showImage );
-//    POINT point;
-//    point.x = x;
-//    point.y = y;
-//    cv::waitKey(0);
-//    if (isMatch){
-//        ai.ExecuteMouseClick(point);
-//        return 0;
-//    }
-//    char path[256];
-//    GetCurrentDirectory(256, path);
-//
-
-    GetWindowHwnd("RenderWindow");
     CONFIG_INSTANCE->init();
-    FILE* pFile = fopen("..\\src\\image_match.json", "rb");
-    if(pFile != nullptr){
-        char readBuffer[65535];
-        rapidjson::FileReadStream inputStream(pFile, readBuffer, sizeof(readBuffer));
-        rapidjson::Document d;
-        d.ParseStream(inputStream);
-        fclose(pFile);
-        const rapidjson::Value& a = d["node_tree"];
-//        printf("%s", d["1"]["name"].GetString());
-        return 0;
-    }
+    auto* ai = new ImageMatchAI;
+    ai->init();
+    ai->ExecuteAiTree();
+//    cv::Mat mainImage = ai->CreateMat();
+//    ai->CreateMat().copyTo(mainImage);
+//    ImageMatcher::CaptureScreen(ai->GetClientHwnd(), mainImage);
+////    cv::Mat mainImage = cv::imread(R"(H:\-ImageMatch\src\s.jpg)", cv::IMREAD_ANYCOLOR);
+//    cv::Mat tmplImage = cv::imread(R"(H:\-ImageMatch\src\t.jpg)", cv::IMREAD_ANYCOLOR);
+////
+//    ImageMatcher::Match(tmplImage, mainImage);
+
     return 0;
 }
