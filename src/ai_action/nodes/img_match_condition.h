@@ -6,7 +6,7 @@
 #define BEHAVIORTREE_IMG_MATCH_CONDITION_H
 #include "conditions/conditions.h"
 #include "opencv2/highgui.hpp"
-#include "image_matcher/ImageMatcher.h"
+#include "image_matcher/ImageMatcherApi.h"
 
 namespace image_match {
     class AIIMConditionBase : public behavior::ConditionBase {
@@ -15,21 +15,24 @@ namespace image_match {
 
         ~AIIMConditionBase() override = default;
 
-        virtual bool ExternalCondition(const BevNodeInputParam& input);
+        bool ExternalCondition(const BevNodeInputParam& input) override;
         void LoadTmplImage(std::__cxx11::string& path);
+
+        void SetMatchType(int type);
+        void SetModeType(int type);
 
     protected:
         int &GetMatchType();
 
         int &GetModeType();
 
-        int m_matchType{cv::TM_SQDIFF_NORMED};
-        int m_modeType{ImageMatcher::E_TEMPLATE_MATCHER};
+        int m_matchType{cv::TM_CCOEFF_NORMED};
+        int m_modeType{ImageMatcherApi::E_TEMPLATE_MATCHER};
         cv::Mat GetTmplImage();
         cv::Mat m_tmplImage;
 
     private:
-        virtual bool AIIMExternalCondition(const BevNodeInputParam &input);
+        virtual bool AIIMExternalCondition(const BevNodeInputParam &input) = 0;
 
     };
 
@@ -39,7 +42,7 @@ namespace image_match {
         ~AIIMAppRunning() override = default;
 
     private:
-        virtual bool AIIMInternalCondition(const BevNodeInputParam &input);
+        virtual bool AIIMExternalCondition(const BevNodeInputParam &input);
 
     };
 
@@ -49,7 +52,7 @@ namespace image_match {
         ~AIIMOnObjScreenUI() override = default;
 
     private:
-        virtual bool AIIMInternalCondition(const BevNodeInputParam &input);
+        virtual bool AIIMExternalCondition(const BevNodeInputParam &input);
 
     };
 

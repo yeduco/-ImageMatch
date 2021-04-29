@@ -9,11 +9,6 @@
 
 namespace image_match{
 
-
-    bool AIIMConditionBase::AIIMExternalCondition(const BevNodeInputParam &input) {
-        return true;
-    }
-
     cv::Mat AIIMConditionBase::GetTmplImage() {
         return this->m_tmplImage;
     }
@@ -27,6 +22,7 @@ namespace image_match{
     }
 
     void AIIMConditionBase::LoadTmplImage(std::string &path) {
+        printf("%s\n", path.c_str());
         this->m_tmplImage = cv::imread(path, cv::IMREAD_ANYCOLOR);
     }
 
@@ -35,18 +31,29 @@ namespace image_match{
         return this->AIIMExternalCondition(input);
     }
 
-    bool AIIMAppRunning::AIIMInternalCondition(const BevNodeInputParam &input) {
+    void AIIMConditionBase::SetMatchType(int type) {
+        this->m_matchType = type;
+    }
+
+    void AIIMConditionBase::SetModeType(int type) {
+        this->m_modeType = type;
+    }
+
+    bool AIIMAppRunning::AIIMExternalCondition(const BevNodeInputParam &input) {
         ImageMatchAI* ai = input.ai;
         return ::IsWindow(ai->GetMainHwnd());
     }
 
-    bool AIIMOnObjScreenUI::AIIMInternalCondition(const BevNodeInputParam &input) {
+    bool AIIMOnObjScreenUI::AIIMExternalCondition(const BevNodeInputParam &input) {
         ImageMatchAI* ai = input.ai;
         HWND& hwnd = ai->GetClientHwnd();
-        cv::Mat mainImage = ai->CreateMat();
-        JUDGE_RETURN(ImageMatcher::CaptureScreen(hwnd, mainImage), false);
-        cv::Mat tmplImage = this->GetTmplImage();
-        std::tuple<bool, int, int, cv::Mat> result = ImageMatcher::Match(tmplImage, mainImage, this->GetMatchType(), this->GetMatchType());
+        cv::Mat mainImage;
+        ai->CreateMat().copyTo(mainImage);
+        JUDGE_RETURN(ImageMatcherApi::CaptureScreen(hwnd, mainImage), false);
+        cv::Mat tmplImage;
+        this->GetTmplImage().copyTo(tmplImage);
+
+        std::tuple<bool, int, int, cv::Mat> result = ImageMatcherApi::Match(tmplImage, mainImage, this->GetModeType(), this->GetMatchType());
         bool isMatch = std::get<0>(result);
         return isMatch;
     }

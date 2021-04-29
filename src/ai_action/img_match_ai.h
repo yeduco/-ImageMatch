@@ -9,6 +9,7 @@
 #include "string"
 #include "windows.h"
 #include "behavior/behavior_tree.h"
+#include "public/tools.h"
 
 class ImageMatchAI {
 public:
@@ -16,9 +17,7 @@ public:
 
     ~ImageMatchAI() = default;
 
-    void init();
-
-    void SetTmplImage(const std::string &img_path);
+    bool init();
 
     HWND &GetMainHwnd();
 
@@ -27,18 +26,14 @@ public:
 public:
     void ExecuteMouseClick(POINT point);
 
-    cv::Mat &GetTmplImage();
-
-    cv::Mat &GetSearchImage();
-
     void SetAiTree(behavior::BehaviorNode *aiTree);
 
     cv::Mat CreateMat();
 
+    int ExecuteAiTree();
+
 private:
     behavior::BehaviorNode *m_aiTree;
-    cv::Mat m_tmplImage;
-    cv::Mat m_searchImage;
     HWND m_hMainHwnd;
     HWND m_hClientHwnd;
 };

@@ -3,6 +3,9 @@
 //
 
 #include "img_match_ai.h"
+#include "public/configure.h"
+#include "btc_factory/BTCFactory.h"
+#include "include.h"
 
 ImageMatchAI::ImageMatchAI() {
     this->m_aiTree = nullptr;
@@ -10,30 +13,40 @@ ImageMatchAI::ImageMatchAI() {
     this->m_hClientHwnd = nullptr;
 }
 
-void ImageMatchAI::init() {
-    this->m_hMainHwnd = GetWindowHwnd("LDPlayerMainFrame");
-//        this->m_hHwnd = GetWindowHwnd("LDPlayerMainFrame");
-    this->m_hClientHwnd = FindWindowEx(this->m_hMainHwnd, nullptr, "RenderWindow", nullptr);
+bool ImageMatchAI::init() {
+    rapidjson::Document &config = CONFIG_INSTANCE->GetBaseConfig();
+    std::string appClassName = config["app_main_name"].GetString();
+    std::string appChildName = config["app_child_name"].GetString();
+    JUDGE_RETURN(!appClassName.empty(), false);
+    if (config.HasMember("app_version")) {
+        std::string version = config["app_version"].GetString();
+        if (!version.empty()) {
+            this->m_hMainHwnd = GetProcessHwndByClassNameAndVersion(appClassName, version);
+            if (!appChildName.empty()) {
+                this->m_hClientHwnd = FindWindowEx(this->m_hMainHwnd, nullptr, appChildName.c_str(), nullptr);
+            } else {
+                this->m_hMainHwnd = GetWindowHwnd(appClassName);
+                if (!appChildName.empty()) {
+                    this->m_hClientHwnd = FindWindowEx(this->m_hMainHwnd, nullptr, appChildName.c_str(), nullptr);
+                }
+            }
+        }
+    }
     int width = 0;
     int height = 0;
     GetWindowWidthHeight(this->m_hClientHwnd, width, height);
-//        this->m_searchImage.create(height, width, CV_8UC4);
-    this->m_searchImage.create(height, width, CV_8UC4);
-    SetWindowPos(this->m_hMainHwnd, HWND_TOP,
-                 0, 0, 0, 0, SWP_NOSIZE | SWP_NOCOPYBITS);
+//    SetWindowPos(this->m_hMainHwnd, HWND_TOP,
+//                 0, 0, 0, 0, SWP_NOSIZE | SWP_NOCOPYBITS);
+    rapidjson::Document& aiTreeConf = CONFIG_INSTANCE->GetImageMatchTree();
+    behavior::BehaviorNode* aiTree = BTCFactory::GenerateAITree(aiTreeConf);
+    this->SetAiTree(aiTree);
+    return true;
 }
-
-cv::Mat &ImageMatchAI::GetTmplImage() {
-    return this->m_tmplImage;
-}
-
-void ImageMatchAI::SetTmplImage(const std::string &imgPath) {
-    //this->m_tmplImage = cv::imread(R"(H:\-ImageMatch\src\t.jpg)", cv::IMREAD_ANYCOLOR);
-    this->m_tmplImage = cv::imread(imgPath, cv::IMREAD_GRAYSCALE);
-}
-
 
 HWND &ImageMatchAI::GetClientHwnd() {
+    if (this->m_hClientHwnd == nullptr){
+        return this->m_hMainHwnd;
+    }
     return this->m_hClientHwnd;
 }
 
@@ -50,11 +63,8 @@ void ImageMatchAI::ExecuteMouseClick(POINT point) {
 }
 
 void ImageMatchAI::SetAiTree(behavior::BehaviorNode *aiTree) {
-
-}
-
-cv::Mat &ImageMatchAI::GetSearchImage() {
-    return this->m_searchImage;
+    BTCFactory::PrintfRootNode(aiTree);
+    this->m_aiTree = aiTree;
 }
 
 cv::Mat ImageMatchAI::CreateMat() {
@@ -62,4 +72,15 @@ cv::Mat ImageMatchAI::CreateMat() {
     int height = 0;
     GetWindowWidthHeight(this->m_hClientHwnd, width, height);
     return cv::Mat(height, width, CV_8UC4);
+}
+
+int ImageMatchAI::ExecuteAiTree() {
+    JUDGE_RETURN(this->m_aiTree != nullptr, -1);
+    BevNodeInputParam input;
+    input.ai = this;
+    JUDGE_RETURN(this->m_aiTree->Evaluate(input) == true, -1);
+    BevNodeInputParam output;
+    output.ai = this;
+    this->m_aiTree->Tick(input, output);
+    return 0;
 }

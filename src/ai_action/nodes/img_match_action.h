@@ -18,21 +18,30 @@ namespace image_match {
         ~AIIMBaseAction() override = default;
         void LoadTmplImage(std::__cxx11::string& path);
 
+        void SetMatchType(int type);
+        void SetModeType(int type);
+        void SetCoordinate(int x, int y);
+
     protected:
         int DoExecute(const BevNodeInputParam &input) override;
 
-        virtual int AIIMExecute(const BevNodeInputParam &input);
+        virtual int AIIMExecute(const BevNodeInputParam &input) = 0;
 
         cv::Mat GetTmplImage();
 
+        POINT &GetCoordinate();
 
         int &GetMatchType();
 
         int &GetModeType();
 
-        int m_matchType{cv::TM_SQDIFF_NORMED};
-        int m_modeType{ImageMatcher::E_TEMPLATE_MATCHER};
+        bool UseCoordinate();
+
+        int m_matchType{cv::TM_CCOEFF_NORMED};
+        int m_modeType{ImageMatcherApi::E_TEMPLATE_MATCHER};
         cv::Mat m_tmplImage;
+        POINT m_coordinate{};
+        bool m_useCoordinate{false};
     };
 
     class AIIMClickAction : public AIIMBaseAction {
