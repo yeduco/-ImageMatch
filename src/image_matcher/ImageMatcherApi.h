@@ -2,25 +2,25 @@
 // Created by iWong on 20/4/2021.
 //
 
-#ifndef _IMAGEMATCH_IMAGEMATCHER_H
-#define _IMAGEMATCH_IMAGEMATCHER_H
+#ifndef _IMAGEMATCH_IMAGEMATCHERAPI_H
+#define _IMAGEMATCH_IMAGEMATCHERAPI_H
 #include <opencv2/opencv.hpp>
 #include "string"
 #include "windows.h"
 #include "public/tools.h"
 
 
-class ImageMatcher {
+class ImageMatcherApi {
 public:
     enum EMatcherType{
         E_FEATURE_MATCHER = 1,
         E_TEMPLATE_MATCHER = 2
     };
 
-    ImageMatcher() = default;
-    ~ImageMatcher() = default;
+    ImageMatcherApi() = default;
+    ~ImageMatcherApi() = default;
 
-    static std::tuple<bool, int, int, cv::Mat> Match(cv::Mat& tmplImage, cv::Mat& mainImage, int type = E_FEATURE_MATCHER, int matchType = cv::TM_CCOEFF_NORMED,int minHessian = 400);
+    static std::tuple<bool, int, int, cv::Mat> Match(cv::Mat& tmplImage, cv::Mat& mainImage, int type = E_TEMPLATE_MATCHER, int matchType = cv::TM_CCOEFF_NORMED,int minHessian = 400);
 
 
     static std::tuple<bool, int, int, cv::Mat> FeatureMatcher(cv::Mat& tmplImage, cv::Mat& mainImage, int minHessian = 400);
@@ -49,4 +49,4 @@ public:
 };
 
 
-#endif //_IMAGEMATCH_IMAGEMATCHER_H
+#endif //_IMAGEMATCH_IMAGEMATCHERAPI_H

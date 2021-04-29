@@ -2,8 +2,8 @@
 // Created by iWong on 20/4/2021.
 //
 
-#include "ImageMatcher.h"
-std::tuple<bool, int, int, cv::Mat> ImageMatcher::Match(cv::Mat& tmplImage, cv::Mat& mainImage, int type, int matchType, int minHessian) {
+#include "ImageMatcherApi.h"
+std::tuple<bool, int, int, cv::Mat> ImageMatcherApi::Match(cv::Mat& tmplImage, cv::Mat& mainImage, int type, int matchType, int minHessian) {
     switch(type){
         case E_FEATURE_MATCHER:
             return FeatureMatcher(tmplImage, mainImage, minHessian);
@@ -15,7 +15,7 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::Match(cv::Mat& tmplImage, cv::
 }
 
 
-std::tuple<bool, int, int, cv::Mat> ImageMatcher::FeatureMatcher(cv::Mat &tmplImage, cv::Mat &mainImage, int minHessian) {
+std::tuple<bool, int, int, cv::Mat> ImageMatcherApi::FeatureMatcher(cv::Mat &tmplImage, cv::Mat &mainImage, int minHessian) {
     // SURF特征点检测
     cv::Ptr<cv::FeatureDetector> detector = cv::SIFT::create(minHessian);
     std::vector<cv::KeyPoint> searchKeyPoint;
@@ -82,7 +82,7 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::FeatureMatcher(cv::Mat &tmplIm
 }
 
 
-std::tuple<bool, int, int, cv::Mat> ImageMatcher::TemplateMatcher(cv::Mat &tmplImage, cv::Mat &mainImage, int matchType) {
+std::tuple<bool, int, int, cv::Mat> ImageMatcherApi::TemplateMatcher(cv::Mat &tmplImage, cv::Mat &mainImage, int matchType) {
     std::tuple<bool, int, int, cv::Mat> result(false, 0, 0, cv::Mat());
     cv::Mat resultImage;
     int result_cols = mainImage.cols - tmplImage.cols + 1;
@@ -119,7 +119,7 @@ std::tuple<bool, int, int, cv::Mat> ImageMatcher::TemplateMatcher(cv::Mat &tmplI
     return result;
 }
 
-void ImageMatcher::DetectAndComputeKeyPoint(cv::Ptr<cv::FeatureDetector> &detector,
+void ImageMatcherApi::DetectAndComputeKeyPoint(cv::Ptr<cv::FeatureDetector> &detector,
                                             cv::Ptr<cv::DescriptorExtractor> &descriptor,
                                             cv::Mat &img1,std::vector<cv::KeyPoint> &outputKeyPoint1,
                                             cv::Mat &img2, std::vector<cv::KeyPoint> &outputKeyPoint2,
@@ -130,7 +130,7 @@ void ImageMatcher::DetectAndComputeKeyPoint(cv::Ptr<cv::FeatureDetector> &detect
     descriptor->compute(img2, outputKeyPoint2, outputMat2);
 }
 
-void ImageMatcher::MatchImage(cv::Mat &img1, std::vector<cv::KeyPoint>& keyPoint1,
+void ImageMatcherApi::MatchImage(cv::Mat &img1, std::vector<cv::KeyPoint>& keyPoint1,
                               cv::Mat &img2, std::vector<cv::KeyPoint>& keyPoint2,
                               cv::Mat &inputImg1Des, cv::Mat &inputImg2Des,
                               cv::Mat &outputImg, std::vector<cv::DMatch> &outputMatches,
@@ -149,7 +149,7 @@ void ImageMatcher::MatchImage(cv::Mat &img1, std::vector<cv::KeyPoint>& keyPoint
 //        }
 }
 
-void ImageMatcher::drawLine(cv::Mat &tmplImg, cv::Mat &mainImage, cv::Mat &matchesImage, std::vector<cv::Point2f> &Point2fVec) {
+void ImageMatcherApi::drawLine(cv::Mat &tmplImg, cv::Mat &mainImage, cv::Mat &matchesImage, std::vector<cv::Point2f> &Point2fVec) {
 //    line(matchesImage, Point2fVec[0] + cv::Point2f(tmplImg.cols, 0), Point2fVec[1] + cv::Point2f(tmplImg.cols, 0), cv::Scalar(0, 0, 255), 2, 8, 0);
 //    line(matchesImage, Point2fVec[1] + cv::Point2f(tmplImg.cols, 0), Point2fVec[2] + cv::Point2f(tmplImg.cols, 0), cv::Scalar(0, 0, 255), 2, 8, 0);
 //    line(matchesImage, Point2fVec[2] + cv::Point2f(tmplImg.cols, 0), Point2fVec[3] + cv::Point2f(tmplImg.cols, 0), cv::Scalar(0, 0, 255), 2, 8, 0);
@@ -169,21 +169,21 @@ void ImageMatcher::drawLine(cv::Mat &tmplImg, cv::Mat &mainImage, cv::Mat &match
 //    cv::waitKey(0);
 }
 
-cv::Point ImageMatcher::CenterPos(cv::Point &leftTopPos, cv::Point &rightBottomPos) {
+cv::Point ImageMatcherApi::CenterPos(cv::Point &leftTopPos, cv::Point &rightBottomPos) {
     double dpiSaleFactor = GetWindowDpiScaleFactor();
     int x = int((leftTopPos.x + rightBottomPos.x) / 2 / dpiSaleFactor);
     int y = int((leftTopPos.y + rightBottomPos.y) / 2 / dpiSaleFactor);
     return {x,y};
 }
 
-cv::Point ImageMatcher::CenterPos(cv::Point2f &leftTopPos, cv::Point2f &rightBottomPos) {
+cv::Point ImageMatcherApi::CenterPos(cv::Point2f &leftTopPos, cv::Point2f &rightBottomPos) {
     double dpiSaleFactor = GetWindowDpiScaleFactor();
     int x = int(((leftTopPos.x + rightBottomPos.x) / 2) / dpiSaleFactor);
     int y = int(((leftTopPos.y + rightBottomPos.y) / 2) / dpiSaleFactor);
     return {x,y};
 }
 
-bool ImageMatcher::CaptureScreen(HWND &hwnd, cv::Mat &output) {
+bool ImageMatcherApi::CaptureScreen(HWND &hwnd, cv::Mat &output) {
     JUDGE_RETURN(hwnd != nullptr, false);
     int width = 0;
     int height = 0;

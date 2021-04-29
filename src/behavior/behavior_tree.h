@@ -8,11 +8,9 @@
 #include <iostream>
 #include <vector>
 #include "test/test.h"
-#include "image_matcher/ImageMatcher.h"
+#include "image_matcher/ImageMatcherApi.h"
 #include "behavior_struct.h"
 namespace behavior {
-
-#define JUDGE_RETURN(CONDITION, RETURN) if (!(CONDITION)){return RETURN;}
 
     class ConditionBase;
 
