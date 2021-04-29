@@ -121,6 +121,35 @@ void GetProcessTitleAndVersion(const HWND& hwnd, std::string &titleVersion) {
     titleVersion.pop_back();
 }
 
+HWND GetProcessHwndByClassNameAndVersion(const std::string& name, const std::string& version){
+    EnumHwndArg enumArg;
+    GetProcessHwndVecByClassName(name, enumArg);
+    for(auto item : *enumArg.dwHwndVec){
+        std::__cxx11::string windowName;
+        GetProcessTitleAndVersion(item, windowName);
+        bool isTarget = IsProcessTargetVersion(item, version);
+        if(isTarget){
+            return item;
+        }
+    }
+    return nullptr;
+}
+
+bool IsProcessTargetVersion(const HWND &hwnd, const std::__cxx11::string& version){
+    char appVersion[VERSION_MAX] = {0};
+    char path[MAX_PATH] = {0};
+    GetProcessPathByHwnd(hwnd, path);
+    GetProcessVersion(path, appVersion);
+    std::string tarVersion;
+    for(auto item : appVersion){
+        tarVersion.append(std::to_string(item)).append(".");
+    }
+    tarVersion.pop_back();
+    if (tarVersion == version) {
+        return true;
+    }
+    return false;
+}
 
 void GetProcessHwndVecByClassName(const std::string& className, EnumHwndArg& eHwndArgs){
     eHwndArgs.dwClassName = className;

@@ -38,6 +38,10 @@ DWORD GetProcessIDByName(const std::string& name);
 
 void GetProcessTitleAndVersion(const HWND &hwnd, std::string& titleVersion);
 
+HWND GetProcessHwndByClassNameAndVersion(const std::string& name, const std::string& version);
+
+bool IsProcessTargetVersion(const HWND &hwnd, const std::string& version);
+
 void GetProcessHwndVecByClassName(const std::string& className, EnumHwndArg& eHwndArgs);
 
 BOOL CALLBACK lpEnumFunc(HWND hwnd, LPARAM lParam);
