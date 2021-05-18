@@ -32,6 +32,8 @@ public:
 
     int ExecuteAiTree();
 
+    void HookProcessMsg();
+
 private:
     behavior::BehaviorNode *m_aiTree;
     HWND m_hMainHwnd;

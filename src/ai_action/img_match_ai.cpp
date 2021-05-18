@@ -7,6 +7,13 @@
 #include "btc_factory/BTCFactory.h"
 #include "include.h"
 
+LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam){
+    if(message == WM_DESTROY){
+        PostQuitMessage(0);
+    }
+    return DefWindowProc(hwnd, message, wParam, lParam);
+}
+
 ImageMatchAI::ImageMatchAI() {
     this->m_aiTree = nullptr;
     this->m_hMainHwnd = nullptr;
@@ -84,4 +91,8 @@ int ImageMatchAI::ExecuteAiTree() {
     output.ai = this;
     this->m_aiTree->Tick(input, output);
     return 0;
+}
+
+void ImageMatchAI::HookProcessMsg() {
+
 }
